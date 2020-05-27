@@ -1,16 +1,16 @@
 /**
- * 个人中心
+ * 默认首页
  */
 import React, { Component } from 'react'
 
-class Profile extends Component {
+export class Index extends Component {
     render() {
         return (
             <div>
-                Profile
+                Index
             </div>
         )
     }
 }
 
-export default Profile
+export default Index
