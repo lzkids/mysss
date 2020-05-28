@@ -15,4 +15,3 @@ class CityList extends Component {
 
 export default CityList;
 
-

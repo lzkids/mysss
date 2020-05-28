@@ -11,13 +11,43 @@ import './index.css'
 import Index from '../Index'
 import House from '../House'
 import Profile from '../Profile'
+// 重构数据结构
+import tabItemDate from '../../utils/tabBarConf';
 
 // 渲染=》标签页组件
 class Home extends Component {
     state = {
-        selectedTab: 'blueTab',
+        selectedTab: this.props.location.pathname
         }
-        
+        // 渲染
+        renderTabBar = () =>{
+            return (
+                <TabBar
+                unselectedTintColor="#949494"
+                tintColor="#33A3F4"
+                barTintColor="white"
+              >
+                {
+                    tabItemDate.map((item,index) => <TabBar.Item title={item.title} key={index} icon={
+                        <i className={`iconfont ${item.icon}`}/>
+                    }
+                    selectedIcon={
+                        <i className={`iconfont ${item.icon}`}/>
+                    }
+                    selected={this.state.selectedTab === item.path}
+                    // 点击事件
+                    onPress={() => {
+                        this.props.history.push(item.path)
+                        this.setState({
+                            selectedTab: item.path
+                        })
+                    }}
+                    />)
+                }
+               
+              </TabBar>
+            )
+        }
    render () {
       return (
           <div className='/home'>
@@ -30,90 +60,10 @@ class Home extends Component {
               <Route path="/home/profile" component={Profile} />
                {/*组件复用*/}
                <div className='box_bar'>
-               <TabBar
-          unselectedTintColor="#949494"
-          tintColor="#33A3F4"
-          barTintColor="white"
-        >
-          <TabBar.Item
-            title="Life"
-            key="Life"
-            icon={<div style={{
-              width: '22px',
-              height: '22px',
-              background: 'url(https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg) center center /  21px 21px no-repeat' }}
-            />
-            }
-            selectedIcon={<div style={{
-              width: '22px',
-              height: '22px',
-              background: 'url(https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg) center center /  21px 21px no-repeat' }}
-            />
-            }
-            selected={this.state.selectedTab === 'blueTab'}
-            badge={1}
-            onPress={() => {
-              this.setState({
-                selectedTab: 'blueTab',
-              });
-            }}
-            data-seed="logId"
-          >
-          </TabBar.Item>
-          <TabBar.Item
-            icon={
-              <div style={{
-                width: '22px',
-                height: '22px',
-                background: 'url(https://gw.alipayobjects.com/zos/rmsportal/BTSsmHkPsQSPTktcXyTV.svg) center center /  21px 21px no-repeat' }}
-              />
-            }
-            selectedIcon={
-              <div style={{
-                width: '22px',
-                height: '22px',
-                background: 'url(https://gw.alipayobjects.com/zos/rmsportal/ekLecvKBnRazVLXbWOnE.svg) center center /  21px 21px no-repeat' }}
-              />
-            }
-            title="Koubei"
-            key="Koubei"
-            badge={'new'}
-            selected={this.state.selectedTab === 'redTab'}
-            onPress={() => {
-              this.setState({
-                selectedTab: 'redTab',
-              });
-            }}
-            data-seed="logId1"
-          >
-          </TabBar.Item>
-          <TabBar.Item
-            icon={
-              <div style={{
-                width: '22px',
-                height: '22px',
-                background: 'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  21px 21px no-repeat' }}
-              />
-            }
-            selectedIcon={
-              <div style={{
-                width: '22px',
-                height: '22px',
-                background: 'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  21px 21px no-repeat' }}
-              />
-            }
-            title="Friend"
-            key="Friend"
-            dot
-            selected={this.state.selectedTab === 'greenTab'}
-            onPress={() => {
-              this.setState({
-                selectedTab: 'greenTab',
-              });
-            }}
-          >
-          </TabBar.Item>
-        </TabBar>
+                   {
+                     this.renderTabBar()
+                   }
+                  
                </div>
           </div>
       )
