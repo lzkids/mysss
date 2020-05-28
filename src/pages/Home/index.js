@@ -28,11 +28,14 @@ class Home extends Component {
                 barTintColor="white"
               >
                 {
-                    tabItemDate.map((item,index) => <TabBar.Item title={item.title} key={index} icon={
-                        <i className={`iconfont ${item.icon}`}/>
+                    tabItemDate.map((item, index) => <TabBar.Item 
+                    title={item.title}
+                    key={index} 
+                    icon={
+                        <i className={`iconfont ${item.icon}`} />
                     }
                     selectedIcon={
-                        <i className={`iconfont ${item.icon}`}/>
+                        <i className={`iconfont ${item.icon}`} />
                     }
                     selected={this.state.selectedTab === item.path}
                     // 点击事件

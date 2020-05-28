@@ -1,10 +1,10 @@
 /**
  * 导航栏数据
  */
-import Nav1 from '../assels/images/nav-1'
-import Nav2 from '../assels/images/nav-2'
-import Nav3 from '../assels/images/nav-3'
-import Nav4 from '../assels/images/nav-4'
+import Nav1 from '../assels/images/nav-1.png'
+import Nav2 from '../assels/images/nav-2.png'
+import Nav3 from '../assels/images/nav-3.png'
+import Nav4 from '../assels/images/nav-4.png'
 const Navs = [
    {
        img: Nav1,
