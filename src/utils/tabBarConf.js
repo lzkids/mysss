@@ -7,12 +7,12 @@ const tabItemDate =[
     },
     {
         title: '找房',
-        icon: 'icon-ind',
+        icon: 'icon-findHouse',
         path: '/home/house'
     },
     {
         title: '个人中心',
-        icon: 'icon-ind',
+        icon: 'icon-my',
         path: '/home/profile'
     }
 ] 

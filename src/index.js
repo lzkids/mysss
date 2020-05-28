@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-
+// 引入字体图标
+import './assels/fonts/iconfont.css'
 ReactDOM.render(
   <React.StrictMode>
     <App />
