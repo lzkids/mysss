@@ -53,10 +53,10 @@ class Home extends Component {
         }
    render () {
       return (
-          <div className='/home'>
+          <div className='home'>
               {/*标签页二级路由*/}
               {/*默认首页*/}
-              <Route exact path='/home/index' component={Index} />
+              <Route exact path='/home' component={Index} />
                {/*房屋列表*/}
               <Route path="/home/house" component={House} />
                {/*个人中心*/}

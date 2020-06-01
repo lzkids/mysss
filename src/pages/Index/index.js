@@ -3,8 +3,8 @@
  */
 import React, { Component } from "react";
 
-// 导入走马灯
-import { Carousel, Flex, Grid, WingBlank } from "antd-mobile";
+// 导入组件
+import { Carousel, Flex, Grid, WingBlank, SearchBar } from "antd-mobile";
 
 import { getSwiper, getGroup, getNews } from "../../api/home";
 
@@ -15,27 +15,39 @@ import "./index.scss";
 // 导入数据
 import Navs from "../../utils/NavigationBar";
 
+// 获取定位城市
+import { getCity } from "../../utils/GlobalPublics/index";
+
 class Index extends Component {
   state = {
     swiper: [], // 数据
     group: [], // 租房小屋数据
     news: [],
     isPlay: false,
-    imgHeight: 212, // 默认高度
+    keyword: "", // 关键词
+    imgHeight: 212, // 高度
+    currCity: {
+      label: "--",
+      value: "",
+    },
   };
   componentDidMount() {
-    this.getSwiper();
-    this.getGroup();
-    this.getNews();
+    this.loadAll();
+    this.getCurCity();
   }
-
-  //   获取轮播图数据(√)
-  getSwiper = async () => {
-    const { status, data } = await getSwiper();
-    if (status === 200) {
+  // 获取首页所有接口
+  loadAll = async () => {
+    const [swiper, group, news] = await Promise.all([
+      getSwiper(),
+      getGroup(),
+      getNews(),
+    ]);
+    if (swiper.status === 200) {
       this.setState(
         {
-          swiper: data,
+          swiper: swiper.data,
+          group: group.data,
+          news: news.data,
         },
         () => {
           this.setState({
@@ -45,25 +57,14 @@ class Index extends Component {
       );
     }
   };
-  //   获取租房小租数据
-  getGroup = async () => {
-    const { status, data } = await getGroup();
-    if (status === 200) {
-      this.setState({
-        group: data,
-      });
-    }
-  };
-  // 获取新闻
-  getNews = async () => {
-    const { status, data } = await getNews();
-    if (status === 200) {
-      this.setState({
-        news: data,
-      });
-    }
-  };
 
+  // 定位城市
+  getCurCity = async () => {
+    let res = await getCity();
+    this.setState({
+      currCity: res,
+    });
+  };
   //   轮播图渲染(√)
   Marqueeswiper = () => {
     return (
@@ -148,9 +149,42 @@ class Index extends Component {
     );
   };
 
+  // 顶部搜索栏
+  renderTopbar = () => {
+    const { push } = this.props.history;
+    return (
+      <Flex justify="around" className="topNav">
+        <div className="searchBox">
+          <div
+            onClick={() => {
+              push("/cityList");
+            }}
+            className="city"
+          >
+            {this.state.currCity.label}
+            <i className="iconfont icon-arrow" />
+          </div>
+          <SearchBar
+            value={this.state.keyword}
+            onChange={(v) => this.setState({ keyword: v })}
+            placeholder="请输入小区或地址"
+          />
+        </div>
+        <div
+          className="map"
+          onClick={() => {
+            push("/map");
+          }}
+        >
+          <i key="0" className="iconfont icon-map" />
+        </div>
+      </Flex>
+    );
+  };
+
   // 渲染新闻
   renderNews() {
-    return this.state.news.map(item => (
+    return this.state.news.map((item) => (
       <div className="news-item" key={item.id}>
         <div className="imgwrap">
           <img className="img" src={`${BASE_URL}${item.imgSrc}`} alt="" />
@@ -169,17 +203,23 @@ class Index extends Component {
     return (
       <div className="indexBox">
         {/* 轮播图 */}
+
         {this.Marqueeswiper()}
+
         {/* 栏目导航 */}
 
         {this.NavigationBar()}
         {/* 内容 */}
+
         {this.ContentSets()}
+
         {/* 新闻 */}
         <div className="news">
           <h3 className="group-title">最新资讯</h3>
           <WingBlank size="md">{this.renderNews()}</WingBlank>
         </div>
+        {/* 搜索栏 */}
+        {this.renderTopbar()}
       </div>
     );
   }

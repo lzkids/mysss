@@ -3,44 +3,49 @@
  */
 
 import Axios from "axios";
-import {  Toast } from "antd-mobile";
+import { Toast } from "antd-mobile";
 
-const BASE_URL = 'https://api-haoke-web.itheima.net'
+const BASE_URL = "https://api-haoke-web.itheima.net";
 //  创建axios实例
 const myAxios = Axios.create({
-     baseURL: BASE_URL
-})
-
+  baseURL: BASE_URL,
+});
 
 // 响应拦截器
 // Add a request interceptor
-myAxios.interceptors.request.use(function (config) {
+myAxios.interceptors.request.use(
+  function (config) {
     // Do something before request is sent
-    Toast.loading('Loading...')
+    Toast.loading("Loading...");
     return config;
-  }, function (error) {
+  },
+  function (error) {
     // Do something with request error
     return Promise.reject(error);
-  });
+  }
+);
 
 // Add a response interceptor
-myAxios.interceptors.response.use(function (response) {
+myAxios.interceptors.response.use(
+  function (response) {
     // 简化数据
-    const data = response.data
+    const data = response.data;
     let _res = {
-        status: data.status,
-        description: data.description,
-        data:data.body
-    }
-    Toast.hide()
+      status: data.status,
+      description: data.description,
+      data: data.body,
+    };
+    Toast.hide();
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     return _res;
-  }, function (error) {
+  },
+  function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     return Promise.reject(error);
-  });
+  }
+);
 
-  export { BASE_URL }
-  export default myAxios
+export { BASE_URL };
+export default myAxios;

@@ -20,7 +20,7 @@ function App() {
       <Router>
      <Switch>
         {/*路由重定向*/}
-        <Redirect exact path='/' to='/home'></Redirect>
+        <Redirect exact from='/' to='/home' />
       {/*首页*/}
       <Route path='/home' component={Home} />
       {/* 城市列表 */}

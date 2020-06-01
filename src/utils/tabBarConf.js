@@ -3,7 +3,7 @@ const tabItemDate =[
     {
         title: '首页',
         icon: 'icon-ind',
-        path: '/home/index'
+        path: '/home'
     },
     {
         title: '找房',
