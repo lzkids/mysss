@@ -6,9 +6,8 @@ import * as serviceWorker from './serviceWorker';
 // 引入字体图标
 import './assels/fonts/iconfont.css'
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+ 
+    <App />,
   document.getElementById('root')
 );
 

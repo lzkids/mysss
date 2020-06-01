@@ -19,3 +19,12 @@ dd {
   margin: 0;
   padding: 0;
 }
+/* 设置容器高度 */
+#root,
+.app {
+  height: 100%;
+}
+
+.test {
+  color: orange;
+}

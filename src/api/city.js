@@ -14,7 +14,7 @@ export function getCurrCity(name) {
 }
 
 // 获取城市列表
-export function getCityList(level = 1) {
+export function getCityList(level=1) {
   return http.get("/area/city", {
     params: {
       level,
@@ -24,5 +24,5 @@ export function getCityList(level = 1) {
 
 // 获取热门城市
 export function getHotCity() {
-  return http.get('/area/hot');
+  return http.get("/area/hot");
 }

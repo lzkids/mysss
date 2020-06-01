@@ -2,12 +2,12 @@
  * 封装axios
  */
 
-import Axios from "axios";
+import axios from "axios";
 import { Toast } from "antd-mobile";
 
-const BASE_URL = "https://api-haoke-web.itheima.net";
+const BASE_URL = 'https://api-haoke-web.itheima.net'
 //  创建axios实例
-const myAxios = Axios.create({
+const myAxios = axios.create({
   baseURL: BASE_URL,
 });
 
@@ -16,7 +16,7 @@ const myAxios = Axios.create({
 myAxios.interceptors.request.use(
   function (config) {
     // Do something before request is sent
-    Toast.loading("Loading...");
+    Toast.loading("Loading...", 0);
     return config;
   },
   function (error) {
@@ -28,6 +28,7 @@ myAxios.interceptors.request.use(
 // Add a response interceptor
 myAxios.interceptors.response.use(
   function (response) {
+    Toast.hide();
     // 简化数据
     const data = response.data;
     let _res = {
@@ -35,7 +36,7 @@ myAxios.interceptors.response.use(
       description: data.description,
       data: data.body,
     };
-    Toast.hide();
+   
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     return _res;
