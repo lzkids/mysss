@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/lzkids/mysss/precache-manifest.a548eaaeabb72187c2b2c81c41b138a6.js"
+  "/lzkids/mysss/precache-manifest.03ac3ca64f839d8e3af48e673edb6857.js"
 );
 
 self.addEventListener('message', (event) => {
