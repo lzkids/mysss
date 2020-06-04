@@ -3,10 +3,14 @@
  */
 import React, { Component } from "react";
 import { getCityList, getHotCity } from "../../api/city";
-import { getCity, setLocalData, CURR_CITY } from "../../utils/GlobalPublics/index";
+import {
+  getCity,
+  setLocalData,
+  CURR_CITY,
+} from "../../utils/GlobalPublics/index";
 
 // 导入列表组件
-import { List, AutoSizer } from 'react-virtualized';
+import { List, AutoSizer } from "react-virtualized";
 
 import { NavBar, Icon, Toast } from "antd-mobile";
 // 导入组件样式
@@ -19,10 +23,9 @@ class CityList extends Component {
     // 归类的数据
     cityList: {},
     // 当前索引值
-    activeIndex: 0
+    activeIndex: 0,
   };
 
-  
   componentDidMount() {
     this.getCityData();
   }
@@ -36,24 +39,25 @@ class CityList extends Component {
       const { status: st, data: dt } = await getHotCity();
       if (st === 200) {
         cityList["hot"] = dt;
-        cityIndex.unshift('hot');
+        cityIndex.unshift("hot");
       }
       //    获取当前城市
       let city = await getCity();
       cityList["#"] = [city];
       //   数据解构一直
       cityIndex.unshift("#");
-     
-    //   响应式
-     this.setState({
+
+      //   响应式
+      this.setState({
         cityList,
         cityIndex,
       });
     }
-  }
+  };
   // 处理后台数据
   formatCities = (data) => {
-    let cityList = {}, cityIndex = []; // 存储首字母数据
+    let cityList = {},
+      cityIndex = []; // 存储首字母数据
     data.forEach((item) => {
       // 归类：城市首字母
       let firstLetter = item.short.slice(0, 1);
@@ -109,7 +113,6 @@ class CityList extends Component {
     isVisible, // This row is visible within the List (eg it is not an overscanned row)
     style, // Style object to be applied to row (to position it)
   }) => {
-
     //    获取归类的数据，并渲染
     const { cityIndex, cityList } = this.state;
     // 列表下归类：title
@@ -119,16 +122,22 @@ class CityList extends Component {
     // row模板
     return (
       <div key={key} style={style} className="city-item">
-        <div className="title">{this.rowFormtitle(title)}</div>
-        {/* 归类城市小列表 */}
-        {
-          titleCity.map((item) => 
-            <div onClick={() => this.selCity(item)} key={item.value} className="name">{item.label}</div>)
-        }
+        <div className="title"> {this.rowFormtitle(title)} </div>{" "}
+        {/* 归类城市小列表 */}{" "}
+        {titleCity.map((item) => (
+          <div
+            onClick={() => this.selCity(item)}
+            key={item.value}
+            className="name"
+          >
+            {" "}
+            {item.label}{" "}
+          </div>
+        ))}{" "}
       </div>
     );
-  }
-    //   动态计算row属性
+  };
+  //   动态计算row属性
   /**
    * index:列表当前行的索引
    */
@@ -141,68 +150,69 @@ class CityList extends Component {
     const titleCity = cityList[title];
     return 36 + 50 * titleCity.length;
   };
-        
-    // 右侧渲染
-    renderCityIndex = () => {
-      const { cityIndex, activeIndex } =this.state
-        
-      return cityIndex.map((item, index) => {
-        return (
-          <li key={item} className="city-index-item" onClick={() => {
-            this.listRef.scrollToRow(index)
-          }}>
-       
-        <span className={activeIndex === index ? 'index-active' : ''}>
 
-          {this.rowFormtitle(item, true)}
-        </span>
+  // 右侧渲染
+  renderCityIndex = () => {
+    const { cityIndex, activeIndex } = this.state;
 
-          </li>
-        )
-      })
-    }
-     // 每次列表重新渲染都会执行
+    return cityIndex.map((item, index) => {
+      return (
+        <li
+          key={item}
+          className="city-index-item"
+          onClick={() => {
+            this.listRef.scrollToRow(index);
+          }}
+        >
+          <span className={activeIndex === index ? "index-active" : ""}>
+            {this.rowFormtitle(item, true)}{" "}
+          </span>
+        </li>
+      );
+    });
+  };
+  // 每次列表重新渲染都会执行
   // startIndex: 当前用户滚动到哪一行的row:index
   onRowsRendered = ({ startIndex }) => {
     if (startIndex !== this.state.activeIndex) {
       // console.log('onRowsRendered', startIndex)
       this.setState({
-        activeIndex: startIndex
-      })
+        activeIndex: startIndex,
+      });
     }
-  }
+  };
 
   render() {
     return (
       <div className="cityListBox">
-        {/* 顶部栏 */}
+        {" "}
+        {/* 顶部栏 */}{" "}
         <NavBar
           mode="dark"
           icon={<Icon type="left" />}
           onLeftClick={() => this.props.history.goBack()}
         >
-          城市选择
-        </NavBar>
-         {/* 城市列表 */}
-         <AutoSizer>
+          城市选择{" "}
+        </NavBar>{" "}
+        {/* 城市列表 */}{" "}
+        <AutoSizer>
+          {" "}
           {({ height, width }) => (
             <List
-            ref={(ele) => this.listRef = ele}
-            scrollToAlignment="start"
-            onRowsRendered={this.onRowsRendered}
-              className='listBox'
+              ref={(ele) => (this.listRef = ele)}
+              scrollToAlignment="start"
+              onRowsRendered={this.onRowsRendered}
+              className="listBox"
               height={height}
               width={width}
               rowCount={this.state.cityIndex.length}
               rowHeight={this.execHeight}
               rowRenderer={this.rowRenderer}
             />
-          )}
-        </AutoSizer>
-        {/* 右侧索引 */}
-        <ul className="city-index">
-          {this.renderCityIndex()}
-        </ul>
+          )}{" "}
+        </AutoSizer>{" "}
+        {/* 右侧索引 */}{" "}
+        <ul className="city-index"> {this.renderCityIndex()} </ul>{" "}
       </div>
     );
   }
