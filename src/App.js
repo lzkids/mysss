@@ -11,7 +11,10 @@ import CityList from './pages/CityList/index'
 import map from './pages/Map/index'
 // 引入404组件
 import NotFound from './pages/NotFound'
-
+// 引入登录组建
+import Login from './pages/Login';
+// 引入寻找房源
+import HouseDetail from './components/HouseDetail';
 
 function App() {
   return (
@@ -27,6 +30,10 @@ function App() {
       <Route path='/cityList' component={CityList} />
       {/*地图*/}
       <Route path='/map' component={map} />
+      {/* 登录 */}
+      <Route path='/login' component={Login} />
+      {/* 房源详情 */}
+      <Route path='/detail/:id' component={HouseDetail} />
       {/*404页面*/}
       <Router component={NotFound} />
       </Switch>

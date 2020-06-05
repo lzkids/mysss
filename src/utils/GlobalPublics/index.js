@@ -4,6 +4,9 @@
 // 导入地图
 import { getCurrCity } from "../../api/city";
 
+// 定义token
+const HZW_TOKEN = 'skj_wifn'
+
 // 存储本地数据
 export function setLocalData(key, val) {
   localStorage.setItem(key, val);
@@ -47,4 +50,4 @@ export function getCity() {
   }
 }
 
-export { CURR_CITY };
+export { CURR_CITY, HZW_TOKEN };
