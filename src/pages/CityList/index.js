@@ -122,18 +122,18 @@ class CityList extends Component {
     // row模板
     return (
       <div key={key} style={style} className="city-item">
-        <div className="title"> {this.rowFormtitle(title)} </div>{" "}
-        {/* 归类城市小列表 */}{" "}
+        <div className="title"> {this.rowFormtitle(title)} </div> 
+        {/* 归类城市小列表 */} 
         {titleCity.map((item) => (
           <div
             onClick={() => this.selCity(item)}
             key={item.value}
             className="name"
           >
-            {" "}
-            {item.label}{" "}
+             
+            {item.label} 
           </div>
-        ))}{" "}
+        ))} 
       </div>
     );
   };
@@ -165,7 +165,7 @@ class CityList extends Component {
           }}
         >
           <span className={activeIndex === index ? "index-active" : ""}>
-            {this.rowFormtitle(item, true)}{" "}
+            {this.rowFormtitle(item, true)} 
           </span>
         </li>
       );
@@ -185,18 +185,18 @@ class CityList extends Component {
   render() {
     return (
       <div className="cityListBox">
-        {" "}
-        {/* 顶部栏 */}{" "}
+         
+        {/* 顶部栏 */} 
         <NavBar
           mode="dark"
           icon={<Icon type="left" />}
           onLeftClick={() => this.props.history.goBack()}
         >
-          城市选择{" "}
-        </NavBar>{" "}
-        {/* 城市列表 */}{" "}
+          城市选择 
+        </NavBar> 
+        {/* 城市列表 */} 
         <AutoSizer>
-          {" "}
+           
           {({ height, width }) => (
             <List
               ref={(ele) => (this.listRef = ele)}
@@ -209,10 +209,10 @@ class CityList extends Component {
               rowHeight={this.execHeight}
               rowRenderer={this.rowRenderer}
             />
-          )}{" "}
-        </AutoSizer>{" "}
-        {/* 右侧索引 */}{" "}
-        <ul className="city-index"> {this.renderCityIndex()} </ul>{" "}
+          )} 
+        </AutoSizer>
+        {/* 右侧索引 */}
+        <ul className="city-index"> {this.renderCityIndex()} </ul>
       </div>
     );
   }

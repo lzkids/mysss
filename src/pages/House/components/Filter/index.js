@@ -18,18 +18,16 @@ const titleSelectedStatus = {
 };
 // 筛选器当前选中的值（默认值）
 const selectedVal = {
-  area: ["area", "null"],
-  mode: ["null"],
-  price: ["null"],
+  area: ['area', 'null'],
+  mode: ['null'],
+  price: ['null'],
   more: [],
 };
 export default class Filter extends Component {
   // 定义状态数据
   state = {
     //  筛选title状态
-    titleSelectedStatus: {
-      ...titleSelectedStatus,
-    },
+    titleSelectedStatus: {...titleSelectedStatus},
     openType: "",
   };
   // 当前选中的筛选器条件
@@ -49,10 +47,7 @@ export default class Filter extends Component {
   //  父组件修改状态数据方法
   onTitleClick = (type) => {
     this.setState({
-      titleSelectedStatus: {
-        ...titleSelectedStatus,
-        [type]: true,
-      },
+      titleSelectedStatus: {...titleSelectedStatus, [type]: true},
       //  当前点击title的type
       openType: type,
     });
@@ -60,8 +55,35 @@ export default class Filter extends Component {
   // 控制三个过滤器内容显示
   isShowPocker = () => {
     const { openType } = this.state;
-    return openType === "area" || openType === "mode" || openType === "price";
+    return openType === 'area' || openType === 'mode' || openType === 'price';
   };
+
+  // 处理接口数据格式
+  handlerFilterData = () => {
+    // 获取存储的筛选器条件数据
+    const {area, mode, price, more } = this.selectedVals;
+    // 存储数据
+    const filterData = {};
+    // 处理第一个筛选器
+    let akey = area[0], aval;
+    // 根据数组长度处理
+    if(area.length === 2) {
+      aval = area[1]
+    } else {
+      if (area[2] === 'null') {
+        aval = area[1]
+      } else {
+        aval = area[2]
+      }
+    }
+    filterData[akey] = aval;
+    filterData.rentType = mode[0];
+    filterData.price = price[0];
+
+    filterData.more = more.join(',')
+    // 返回处理完数据
+    return filterData
+  }
   // 取消
   onOK = (selectedVal) => {
     const { openType } = this.state
@@ -69,6 +91,8 @@ export default class Filter extends Component {
       this.setState({
         openType: '',
         titleSelectedStatus: this.handlerSel()
+      }, ()=>{
+        this.props.onFilter(this.handlerFilterData())
       })
   }; // 取消状态栏
   onCancel = () => {
@@ -92,8 +116,8 @@ export default class Filter extends Component {
         newStatus[item] = true;
       } else if (item === "price" && cur[0] !== "null") {
         newStatus[item] = true;
-      } else if (item === "more") {
-        newStatus[item] = false;
+      } else if (item === "more" && cur.length) {
+        newStatus[item] = true;
       } else {
         newStatus[item] = false;
       }
@@ -112,23 +136,20 @@ export default class Filter extends Component {
       let lastSel = this.selectedVals[openType];
       // eslint-disable-next-line default-case
       switch (openType) {
-        case "area":
-          data = [area, subway];
-          col = 3;
+        case "area": data = [area, subway]; col = 3;
           break;
-        case "mode":
-          data = rentType;
+        case "mode": data = rentType;
           break;
-        case "price":
-          data = price;
+        case "price": data = price;
           break;
       }
       return (
         <FilterPicker
+        key={openType}
           data={data}
           col={col}
           value={lastSel}
-          onClick={this.onCancel}
+          onCancel={this.onCancel}
           onOK={this.onOK}
         />
       );
@@ -138,12 +159,12 @@ export default class Filter extends Component {
  
   // 筛选第四个筛选器
 renderMore = () => {
-  const { openType } = this.state
+  const { openType } = this.state;
   if (openType === 'more') {
     const { characteristic, oriented, roomType, floor} = this.filterDatas
     let data = {characteristic, oriented, roomType, floor}
     return (
-      <FilterMore key={openType} data={data} onCancel={this.onCancel} onOK={this.onOK} />
+      <FilterMore value={this.selectedVals[openType]} data={data} onCancel={this.onCancel} onOK={this.onOK} />
     )
   }
 }
@@ -153,9 +174,11 @@ renderMore = () => {
     return (
       <div className={styles.root}>
          {/* 前三个菜单的遮罩层 */}
-        {this.isShowPocker() ? (
+        {
+        this.isShowPocker() ? (
           <div onClick={this.onCancel} className={styles.mask} />
-        ) : null}
+        ) : null
+        }
         <div className={styles.content}>
           {/* // 标题栏 */}
           <FilterTitle

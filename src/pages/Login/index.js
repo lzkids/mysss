@@ -14,7 +14,7 @@ import { withFormik } from 'formik';
 
 // 验证规则：
 const REG_UNAME = /^[a-zA-Z_\d]{5,8}$/
-const REG_PWD = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,10}$/                //  /^[a-zA-Z_\d]{5,12}$/
+const REG_PWD = /^[a-zA-Z_\d]{5,12}$/     // /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,10}$/                 
 
 class Login extends Component {
   state = {
@@ -25,12 +25,13 @@ class Login extends Component {
   render() {
     const {    
        values,
-       touched,
+      //  touched,
        errors, 
        handleChange,
-       handleBlur,
+      //  handleBlur,
        handleSubmit,
       }  = this.props
+      
     return (
       <div className={styles.root}>
         {/* 顶部导航 */}
@@ -55,9 +56,9 @@ class Login extends Component {
     <div className={styles.error}>{errors.username}</div>
             <div className={styles.formItem}>
               <input
-              value={values.password}
-              name='password'
-              onChange={handleChange}
+                value={values.password}
+                name='password'
+                onChange={handleChange}
                 className={styles.input}
                 type="password"
                 placeholder="请输入密码"
@@ -90,7 +91,7 @@ const MyLogin = withFormik({
 
   // 做校验
   validationSchema: yup.object().shape({
-    username: yup.string().required('帐号为必填项').matches(REG_UNAME),
+    username: yup.string().required('帐号为必填项').matches(REG_UNAME,'数字或字母'),
     password: yup.string().required('密码为必填项').matches(REG_PWD,'只能由数字，字母组成，不能有特殊符号,并且长度限制在8-10位'),
   }),
   //  提交
@@ -100,7 +101,13 @@ const MyLogin = withFormik({
     let {status, data, description} = await login({username, password})       
           if (status === 200) {        
               setLocalData(HZW_TOKEN, data.token)      
-              this.props.history.push('/home/profile')   
+
+              if(props.location.backUrl) {
+                props.history.replace(props.location.backUrl)
+              } else {
+                props.history.push('/home/profile')   
+              }
+            
           } else {   
               Toast.fail(description, 2)
               setValues({username: '', password: ''})

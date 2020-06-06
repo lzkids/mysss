@@ -6,6 +6,21 @@ import { getCurrCity } from "../../api/city";
 
 // 定义token
 const HZW_TOKEN = 'skj_wifn'
+// 封装token方法
+export function setToken() {
+   setLocalData(HZW_TOKEN)
+}
+
+export function getToken() {
+  return getLocalData(HZW_TOKEN)
+}
+
+export function delToken() {
+     delLcoaclData(HZW_TOKEN)
+}
+export function isAuth() {
+   return !!getToken()
+}
 
 // 存储本地数据
 export function setLocalData(key, val) {

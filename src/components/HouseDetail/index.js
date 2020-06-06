@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import { Carousel, Flex, Modal, Toast, NavBar, Icon } from 'antd-mobile'
-import axios from 'axios'
+// import axios from 'axios'
 import HouseItem from '../HouseItem'
 import styles from './index.module.css'
 import HousePackage from '../HousePackage'
-const BASE_URL = `http://localhost:8080`
+import { isAuth } from '../../utils/GlobalPublics'
+import { checkFavById, delFav, addFav } from '../../api/suer'
+import { getDetailById } from '../../api/house'
+import { BASE_URL } from '../../utils/axios'
+
 // 猜你喜欢
 const recommendHouses = [
   {
@@ -92,7 +96,9 @@ export default class HouseDetail extends Component {
     },
 
     // 表示房源是否收藏
-    isFavorite: false
+    isFavorite: false,
+    // 轮播图默认高度
+    imgHeigth: 252
   }
 
   componentDidMount() {
@@ -102,7 +108,60 @@ export default class HouseDetail extends Component {
 
     // 获取房屋数据
     this.getHouseDetail()
+    this.checkFav()
   }
+
+  handleFavorite = async() =>{
+    if(!isAuth()) {
+       alert('提示', '您没有登录，登录后才能收藏', [
+        { text: '取消' },
+        {
+          text: '确定',
+          onPress: async () =>
+          {
+            this.props.history.replace({pathname:'/login',backUrl:this.props.location.pathname})
+          }
+        },
+      ])
+    } else {
+      // 6 根据 isFavorite 判断，当前房源是否收藏。
+      // 7 如果未收藏，就调用添加收藏接口，添加收藏。
+      // 8 如果已收藏，就调用删除收藏接口，去除收藏。
+           const {isFavorite} = this.state
+           const {id} = this.props.match.params
+           if (isFavorite) {
+             const {status, description} = await delFav(id)
+             if (status === 200) {
+               Toast.success(description, 2)
+               this.setState({
+                 isFavorite: false
+               })
+             }
+           } else {
+             const {status, description} = await addFav(id)
+             if (status === 200) {
+                Toast.success(description, 2)
+                this.setState({
+                  isFavorite: true
+                })
+             }
+           }
+       }
+  }
+
+    // 页面加载时候：如果用户登录=>则查询当前房源是否搜藏过
+
+    checkFav = async () => {
+      if(!isAuth) return
+      const {id} = this.props.match.params
+    const { status, data } = await checkFavById(id)
+    if(status === 200) {
+       this.setState({
+         isFavorite: data.isFavorite
+       })
+    }
+    }
+
 
   /* 
       收藏房源：
@@ -112,10 +171,7 @@ export default class HouseDetail extends Component {
       3 如果未登录，则使用 Modal.alert 提示用户是否去登录。
       4 如果点击取消，则不做任何操作。
       5 如果点击去登录，就跳转到登录页面，同时传递 state（登录后，再回到房源收藏页面）。
-      
-      6 根据 isFavorite 判断，当前房源是否收藏。
-      7 如果未收藏，就调用添加收藏接口，添加收藏。
-      8 如果已收藏，就调用删除收藏接口，去除收藏。
+    
 
       alert('提示', '登录后才能收藏房源，是否去登录?', [
         { text: '取消' },
@@ -130,23 +186,16 @@ export default class HouseDetail extends Component {
   async getHouseDetail() {
     const { id } = this.props.match.params
 
-    // 开启loading
-    this.setState({
-      isLoading: true
-    })
-
-    const res = await axios.get(
-      `http://localhost:8080/houses/5cc47c8d1439630e5b47d45d`
-    )
+   
+    const {data} = await getDetailById(id)
 
     // console.log(res.data.body)
 
     this.setState({
-      houseInfo: res.data.body,
-      isLoading: false
+      houseInfo: data
     })
 
-    const { community, coord } = res.data.body
+    const { community, coord } = data
 
     // 渲染地图
     this.renderMap(community, coord)
@@ -159,8 +208,14 @@ export default class HouseDetail extends Component {
     } = this.state
 
     return houseImg.map(item => (
-      <a key={item} href="http://itcast.cn">
-        <img src={BASE_URL + item} alt="" />
+      <a key={item} href="http://itcast.cn" style={{ display:'inline-block', width:'100%', background:'gray', height:this.state.imgHeigth}}>
+        <img src={BASE_URL + item} 
+         style={{width:'100%', verticalAlign:'top'}}
+         onLoad={() => {
+           window.dispatchEvent(new Event('resize'));
+           this.setState({imgHeigth: 'auto'})
+         }}
+        alt="" />
       </a>
     ))
   }
@@ -231,7 +286,7 @@ export default class HouseDetail extends Component {
         <NavBar
           mode="dark"
           icon={<Icon type="left" />}
-          onLeftClick={() => console.log('onLeftClick')}
+          onLeftClick={() => this.props.history.goBack()}
           rightContent={[<i key="share" className="iconfont icon-share" />]}
         >
           房屋详情

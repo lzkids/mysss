@@ -15,7 +15,12 @@ import NotFound from './pages/NotFound'
 import Login from './pages/Login';
 // 引入寻找房源
 import HouseDetail from './components/HouseDetail';
-
+// 已 发布房源列表 
+import Rent from './pages/Rent';
+// 发布房源搜索=》当前发布房源的小区
+import Search from './pages/Rent/Search';
+// 发布房源
+import RentAdd from './pages/Rent/Add'
 function App() {
   return (
     <div className="App">
@@ -34,6 +39,12 @@ function App() {
       <Route path='/login' component={Login} />
       {/* 房源详情 */}
       <Route path='/detail/:id' component={HouseDetail} />
+      {/*已 发布房源列表 */}
+      <Route path='/rent' component={Rent} />
+        {/* 发布房源 */}
+        <Route path='/rent/add' component={RentAdd} />
+         {/* 发布房源搜索=》当前发布房源的小区 */}
+        <Route path='/rent/serach' component={Search} />
       {/*404页面*/}
       <Router component={NotFound} />
       </Switch>

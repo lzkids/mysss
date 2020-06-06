@@ -47,7 +47,7 @@ export default function FilterTitle(props) {
   return (
     <Flex align="center" className={styles.root}>
       {
-      renderTiltle()
+         renderTiltle()
       }
     </Flex>
   );

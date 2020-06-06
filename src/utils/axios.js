@@ -4,6 +4,7 @@
 
 import axios from "axios";
 import { Toast } from "antd-mobile";
+import { getToken } from "./GlobalPublics";
 
 const BASE_URL = 'https://api-haoke-web.itheima.net'
 //  创建axios实例
@@ -15,6 +16,14 @@ const myAxios = axios.create({
 // Add a request interceptor
 myAxios.interceptors.request.use(
   function (config) {
+/**
+ * 添加headers添加token接口
+ */
+const {url, headers} = config, whilteList = ['/user/registered','/user/login']
+if (url.startsWith('/user') && whilteList.includes(url)) {
+   headers.authorization = getToken
+}
+
     // Do something before request is sent
     Toast.loading("Loading...", 0);
     return config;

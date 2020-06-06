@@ -1,6 +1,9 @@
-body {
+body,
+html
+ {
  height: 100%;
  color: #333;
+ background-color: #fff;
 }
 
 ul,li{
@@ -20,11 +23,13 @@ dd {
   padding: 0;
 }
 
-#root,
-.app {
+#root{
   height: 100%;
 }
 
+.App {
+  height: 100%;
+}
 .test {
   color: orange;
 }
