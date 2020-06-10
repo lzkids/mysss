@@ -1,18 +1,25 @@
 /**
  * Home组件
  */
-import React, { Component } from 'react'
+import React, { Component, lazy } from 'react'
 import { Route } from 'react-router-dom'
 // 导入Tabar
 import { TabBar } from 'antd-mobile';
 // 引入样式
 import './index.css'
-// 二级路由
-import Index from '../Index'
-import House from '../House'
-import Profile from '../Profile'
+
 // 重构数据结构
 import tabItemDate from '../../utils/tabBarConf';
+// 二级路由
+// import Index from '../Index'
+// import House from '../House'
+// import Profile from '../Profile'
+
+// 按需加载
+const Index = lazy (() => import('../Index'))
+const House = lazy (() => import('../House'))
+const Profile = lazy (() => import('../Profile'))
+
 
 // 渲染=》标签页组件
 class Home extends Component {
